@@ -35,7 +35,6 @@ extern "C"{
 #endif
 
 #define ESP_MFI_DEBUG_FL "\n"
-#define CONFIG_ESP_MFI_DEBUG_ENABLE
 #ifdef CONFIG_ESP_MFI_DEBUG_ENABLE
 #define ESP_MFI_DEBUG_ENABLE
 #endif /* CONFIG_ESP_MFI_DEBUG_ENABLE */
