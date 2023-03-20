@@ -43,6 +43,7 @@ int hap_pair_setup_manage_mfi_auth(pair_setup_ctx_t *ps_ctx, hap_tlv_data_t *tlv
     return ESP_OK;
 }
 
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
 int hap_enable_mfi_auth(hap_mfi_auth_type_t auth_type)
 {
     ESP_MFI_DEBUG(ESP_MFI_DEBUG_WARN, "MFi auth not supported. Falling back to HAP_MFI_AUTH_NONE");
@@ -99,3 +100,4 @@ esp_err_t hap_acc_add_wifi_transport_service(hap_acc_t *ha, uint32_t capabilitie
     ESP_MFI_DEBUG(ESP_MFI_DEBUG_WARN, "Wi-Fi reconfiguration service not supported. Please use MFi variant of the SDK.");
     return ESP_FAIL;
 }
+#endif

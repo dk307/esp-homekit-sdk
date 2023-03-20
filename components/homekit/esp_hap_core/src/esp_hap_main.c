@@ -112,8 +112,10 @@ static void hap_common_sm(hap_internal_event_t event)
             vTaskDelay(1000 / hap_platform_os_get_msec_per_tick());
             hap_close_all_sessions();
             hap_mdns_deannounce();
-            hap_erase_controller_info();
+            hap_erase_controller_info();    
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
             hap_erase_network_info();
+#endif
             hap_erase_accessory_info();
             reboot_reason = HAP_REBOOT_REASON_RESET_HOMEKIT_DATA;
             break;
@@ -125,6 +127,7 @@ static void hap_common_sm(hap_internal_event_t event)
             hap_mdns_deannounce();
             reboot_reason = HAP_REBOOT_REASON_REBOOT_ACC;
             break;
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
         case HAP_INTERNAL_EVENT_RESET_NETWORK:
             ESP_MFI_DEBUG(ESP_MFI_DEBUG_INFO, "Resetting Network Credentials");
             /* Wait for some time, close all the active sessions and then
@@ -136,11 +139,13 @@ static void hap_common_sm(hap_internal_event_t event)
             hap_erase_network_info();
             reboot_reason = HAP_REBOOT_REASON_RESET_NETWORK;
             break;
+#endif            
         case HAP_INTERNAL_EVENT_TRIGGER_NOTIF:
 /* TODO: Avoid direct http function. Notification could be even for iCloud or BLE.
  */
             hap_http_send_notif();
             return;
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
         case HAP_INTERNAL_EVENT_NETWORK_SWITCH:
             ESP_MFI_DEBUG(ESP_MFI_DEBUG_INFO, "Taking the network down");
             /* wait for some time, close all the active sessions and then
@@ -163,6 +168,16 @@ static void hap_common_sm(hap_internal_event_t event)
             vTaskDelay(1000 / hap_platform_os_get_msec_per_tick());
             hap_wifi_config_revert_network();
             return;
+#else       
+        case HAP_INTERNAL_EVENT_STOP:
+            ESP_MFI_DEBUG(ESP_MFI_DEBUG_INFO, "Stopping");
+            /* wait for some time, close all the active sessions and then
+             * erase network info.
+             */
+            hap_close_all_sessions();
+            hap_mdns_deannounce();
+            return;
+#endif            
         default:
             return;
         }
@@ -313,6 +328,7 @@ int hap_reset_network()
     return hap_send_event(HAP_INTERNAL_EVENT_RESET_NETWORK);
 }
 
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
 int hap_trigger_network_switch(void)
 {
     return hap_send_event(HAP_INTERNAL_EVENT_NETWORK_SWITCH);
@@ -322,6 +338,12 @@ int hap_trigger_network_revert(void)
 {
     return hap_send_event(HAP_INTERNAL_EVENT_NETWORK_REVERT);
 }
+#else
+int hap_nw_stop(void)
+{
+    return hap_send_event(HAP_INTERNAL_EVENT_STOP);
+}
+#endif
 
 int hap_start(void)
 {

@@ -13,6 +13,13 @@ menu "HomeKit"
         help
             Enable Debug Logging for Hap core
 
+    config DISABLE_WIFI_INTEGRATION
+        bool "Disable Wifi Integration"
+        default y
+        depends on !HAP_MFI_ENABLE
+        help
+            Disable Wifi Integration
+
     config HAP_SESSION_KEEP_ALIVE_ENABLE
         bool "Enable Keep Alive on sessions"
         default n

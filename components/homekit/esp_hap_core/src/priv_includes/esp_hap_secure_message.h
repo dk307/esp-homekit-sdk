@@ -37,6 +37,8 @@ typedef struct {
     size_t token_len;
 } hap_software_token_info_t;
 
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
 int hap_register_secure_message_handler(httpd_handle_t handle);
 int hap_unregister_secure_message_handler(httpd_handle_t handle);
+#endif
 #endif /* _HAP_SECURE_MESSAGE_H_ */

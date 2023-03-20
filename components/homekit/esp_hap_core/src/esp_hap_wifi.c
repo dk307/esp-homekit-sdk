@@ -58,6 +58,7 @@ bool hap_is_network_configured(void)
     return provisioned;
 }
 
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
 void hap_erase_network_info(void)
 {
     esp_wifi_restore();
@@ -135,3 +136,5 @@ esp_err_t hap_wifi_sta_switch(wifi_config_t *config)
     esp_wifi_connect();
     return ESP_OK;
 }
+#endif
+

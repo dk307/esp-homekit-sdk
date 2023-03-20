@@ -1520,9 +1520,11 @@ int hap_register_http_handlers()
         httpd_register_uri_handler(hap_priv.server, &hap_characteristics_put);
         httpd_register_uri_handler(hap_priv.server, &hap_identify);
         httpd_register_uri_handler(hap_priv.server, &hap_prepare);
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION        
         if (hap_priv.features & HAP_FF_SW_TOKEN_AUTH) {
             hap_register_secure_message_handler(hap_priv.server);
         }
+#endif
     }
     hap_http_registered = true;
     return HAP_SUCCESS;
@@ -1540,9 +1542,12 @@ int hap_unregister_http_handlers()
         httpd_unregister_uri_handler(hap_priv.server, "/characteristics", HTTP_PUT);
         httpd_unregister_uri_handler(hap_priv.server, "/identify", HTTP_POST);
         httpd_unregister_uri_handler(hap_priv.server, "/prepare", HTTP_PUT);
+
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION        
         if (hap_priv.features & HAP_FF_SW_TOKEN_AUTH) {
             hap_unregister_secure_message_handler(hap_priv.server);
         }
+        #endif
     }
     hap_http_registered = false;
     return HAP_SUCCESS;

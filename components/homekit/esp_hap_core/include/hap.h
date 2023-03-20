@@ -1338,6 +1338,7 @@ int hap_check_mfi_chip();
  */
 int hap_reboot_accessory();
 
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
 /**
  * @brief Reset to Factory Settings
  *
@@ -1369,6 +1370,7 @@ int hap_reset_to_factory();
  * @return HAP_FAIL on failure
  */
 int hap_reset_network();
+#endif
 
 /**
  * @brief Reset HomeKit Data
@@ -1597,6 +1599,12 @@ char *esp_hap_get_setup_payload(char *setup_code, char *setup_id, bool wac_suppo
  * as per the requirements of HAP Specs R16.
  */
 void hap_pair_setup_re_enable(void);
+
+
+#ifdef CONFIG_DISABLE_WIFI_INTEGRATION
+int hap_nw_stop(void);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

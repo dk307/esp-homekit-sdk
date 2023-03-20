@@ -48,8 +48,12 @@ typedef enum {
     HAP_INTERNAL_EVENT_RESET_NETWORK,
     HAP_INTERNAL_EVENT_TRIGGER_NOTIF,
     HAP_INTERNAL_EVENT_RESET_HOMEKIT_DATA,
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
     HAP_INTERNAL_EVENT_NETWORK_SWITCH,
     HAP_INTERNAL_EVENT_NETWORK_REVERT,
+#else
+    HAP_INTERNAL_EVENT_STOP,
+#endif
 } hap_internal_event_t;
 
 typedef struct {
@@ -70,7 +74,9 @@ bool is_hap_loop_started();
 void hap_report_event(hap_event_t event, void *data, size_t data_size);
 int hap_enable_hw_auth(void);
 int hap_enable_sw_auth(void);
+#ifndef CONFIG_DISABLE_WIFI_INTEGRATION
 int hap_trigger_network_switch(void);
 int hap_trigger_network_revert(void);
+#endif
 
 #endif /* _HAP_MAIN_LOOP_H_ */
